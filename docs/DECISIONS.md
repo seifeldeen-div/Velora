@@ -27,3 +27,4 @@ Use one entry per decision. Keep undecided items TBD elsewhere.
 | 2026-11-13 | Out-of-stock products remain visible with an out-of-stock badge and disabled add-to-cart. | TBD | Confirmed by owner. |
 | 2026-11-13 | Order status values remain TBD with the backend owner; do not hardcode them. | TBD | Confirm with backend owner before implementation. |
 | 2026-11-13 | Owner will provide design images with each UI-phase prompt from Phase 04 onward; images are the source of truth for colors, fonts, spacing, radius, shadows, and layout. Do not select TBD values before then. | TBD | Confirmed by owner. |
+| 2026-11-13 | Persist language choice in `localStorage`; use English on first visit. | Other persistence locations; another initial language. | Confirmed by owner. |

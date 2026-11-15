@@ -2,8 +2,8 @@
 
 - React e-commerce frontend; Laravel/Sanctum backend is developed separately.
 - Stack: React + Vite, JavaScript only, React Router, centralized Fetch API client,
-  react-i18next, react-hook-form, and Tailwind CSS.
-- Use JSDoc for key shapes and strict ESLint. TanStack Query is pending confirmation.
+  react-i18next, react-hook-form, TanStack Query, and Tailwind CSS.
+- Use JSDoc for key shapes and strict ESLint.
 - Use mock data until backend endpoints are ready.
 
 ## Session start protocol
@@ -39,8 +39,9 @@
   review moderation.
 - Order notifications are an in-site status timeline only.
 - Use Tailwind logical spacing utilities (`ms-`, `me-`, `ps-`, `pe-`); never `ml-`/`mr-`.
-- Visual direction: minimal modern with a luxury touch; one accent color in one theme
-  file; Cairo / IBM Plex Sans Arabic and Inter. Dark mode is postponed.
+- Visual direction: minimal modern with a luxury touch; design images are the source
+  of truth for theme values. Keep one accent variable in one theme file; font details
+  are TBD until images arrive. Dark mode is postponed.
 - React Bits: copy into `src/components/effects/` behind project wrappers; use only
   in hero, section titles, and auth pages. Never use in checkout, forms, large product
   lists, or admin. Respect reduced motion, lazy-load heavy effects, and test Arabic
