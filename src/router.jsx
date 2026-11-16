@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import PagePlaceholder from './pages/PagePlaceholder.jsx'
 import {
@@ -9,7 +10,7 @@ import {
 
 const page = (titleKey) => <PagePlaceholder titleKey={titleKey} />
 
-export const router = createBrowserRouter([
+const routes = [
   {
     path: '/',
     element: <PublicLayout />,
@@ -64,4 +65,21 @@ export const router = createBrowserRouter([
       { path: 'reviews', element: page('pages.adminReviews') },
     ],
   },
-])
+]
+
+if (import.meta.env.DEV) {
+  const ComponentsShowcase = lazy(
+    () => import('./pages/ComponentsShowcase.jsx'),
+  )
+
+  routes.push({
+    path: '/dev/components',
+    element: (
+      <Suspense fallback={<PagePlaceholder titleKey="showcase.title" />}>
+        <ComponentsShowcase />
+      </Suspense>
+    ),
+  })
+}
+
+export const router = createBrowserRouter(routes)

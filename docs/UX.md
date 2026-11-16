@@ -446,18 +446,22 @@ flowchart TD
 ## D. Design tokens
 
 - Fixed: minimal modern with a luxury touch.
-- Design images supplied with each UI-phase prompt from Phase 04 onward are the source of truth for colors, fonts, spacing, radius, shadows, and layout.
-- Until then, accent color and font details, radius, shadows, and layout remain TBD. Use Tailwind default spacing unless the images show otherwise.
-- Store the eventual accent color as one variable in the theme file; do not select a color before receiving the images.
+- Design reference: `https://preview.themewagon.com/automark/`. Values below are extracted from its rendered desktop/mobile page and are visual guidance only; its content and assets are not reused. No screenshots were attached for comparison.
+- Extracted palette: page `#03010E`, panel `#0B0C17`, body text `#DAD4DE`, heading `#FFFFFF`, muted text `#817E84`, violet accent `#937AFF`, deeper button-gradient stop `#4D36D0`, and error `#FF5353`.
+- Extracted typography: body uses Inter Tight at 16px/26px, regular weight; headings use Urbanist at 31px/39px on mobile and 39px/49px on desktop, bold. Buttons are regular weight. These template fonts are not adopted pending license confirmation. Use the project font stack: Inter for English and Cairo with IBM Plex Sans Arabic fallback for Arabic; keep the extracted sizing and weight hierarchy.
+- Extracted geometry: desktop content container is 1320px; ordinary section spacing is 64px and compact/mobile section padding is about 51px; desktop header is about 88px tall and mobile header about 83px; large section panels use 80px radius at desktop and 36px at mobile, while buttons and visible form fields are pill-shaped and small outlined controls use about 4px radius. The visible email field is 66px tall with 20px/28px padding on desktop and 53px tall with 16px/22px padding on mobile.
+- Extracted surface treatment: cards/panels are flat with no shadow; a media overlay uses the browser's `shadow-lg` treatment. The header is transparent over the dark page with a centered rounded navigation surface on desktop; the footer is a dark, spacious multi-column area that stacks on mobile.
+- The reference is available at the page's actual 830px and 1440px renderings; layout sizing follows Tailwind defaults unless a measured reference value is recorded above.
+- Keep the selected accent as one token in `src/styles/theme.css`; dark mode remains postponed as a product feature.
 - Fixed CSS directionality: Tailwind logical utilities only (`ms-`, `me-`, `ps-`, `pe-`); never `ml-` / `mr-`.
 
 | Token | Confirmed | Remaining TBD |
 |---|---|---|
-| Accent | One variable in the theme file once selected | Color and exact hex pending design images. |
-| Fonts | None before design images | Font family and details. |
-| Spacing | Tailwind default scale unless images show otherwise | Image overrides, if any. |
-| Radius | None before design images | Values and treatment. |
-| Shadows | None before design images | Values and treatment. |
+| Accent | `#937AFF` in `src/styles/theme.css` | Extracted from reference. |
+| Fonts | Inter; Cairo with IBM Plex Sans Arabic fallback; 16px/26px body, 31px mobile/39px desktop bold headings | Project fonts; template Inter Tight/Urbanist need license confirmation before use. |
+| Spacing | Tailwind default scale; 51px compact, 64px section, 152px desktop panel spacing; 1320px max content width | Extracted from reference. |
+| Radius | 9999px controls/fields, 36px mobile panels, 80px desktop panels, 4px small outlines | Extracted from reference. |
+| Shadows | No card shadow; reference `shadow-lg` for media overlay | Extracted from reference. |
 | Breakpoints | Tailwind defaults: sm 640, md 768, lg 1024, xl 1280 | None. |
 
 ## E. Screen states
@@ -510,41 +514,46 @@ flowchart TD
 
 ## G. React Bits placement map
 
-- Copy effects into `src/components/effects/` behind project wrappers.
-- Respect `prefers-reduced-motion`; lazy-load heavy effects. Test every text effect in Arabic first, including connected letters.
-- No three.js, gsap, or ogl without owner approval.
+- Use React Bits across pages and sections at the intensity shown below; choose or adapt the named effect to fit the design. These are design choices, not a dependency approval.
+- Copy each adopted effect into `src/components/effects/` behind a project wrapper so it can be swapped or removed.
+- Every effect must fall back to static content with `prefers-reduced-motion`. Lazy-load heavy effects and never let them delay main content/LCP.
+- Product-list effects must stay cheap (CSS transform/opacity only), with no heavy per-card animation.
+- Test each text effect in Arabic and RTL, including connected letters, before adopting it; if it breaks Arabic, do not apply it to Arabic text.
+- No animation may block or delay an action. Checkout, forms, and admin are subtle-only: no backgrounds, text effects, or continuous/looping animation.
+- Dependency entries list what the chosen effect needs. The initial choices below use CSS and native browser/React capabilities only. Ask before adding heavy dependencies such as three.js, gsap, or ogl.
 
-| Page | Placement |
-|---|---|
-| Home | Hero (if present; TBD) and section titles only |
-| Product listing | Section titles only; never in product lists |
-| Search results | Section titles only; never in result lists |
-| Product details | Section titles only |
-| Cart | Section titles only; never in cart items |
-| Checkout | Forbidden |
-| Order confirmation | Section titles only |
-| Login | Auth page |
-| Register | Auth page |
-| Forgot/reset password | Auth page |
-| Account overview | Section titles only |
-| Profile | Forbidden in forms |
-| Addresses | Forbidden in forms |
-| Orders list | Section titles only; not in order lists |
-| Order details | Section titles only |
-| About | Section titles only |
-| Contact | Section titles only; forbidden in forms |
-| Policies | Section titles only |
-| 404 | Section titles only |
-| Access denied | Section titles only |
-| Admin dashboard | Forbidden |
-| Admin products list | Forbidden |
-| Admin product create | Forbidden |
-| Admin product edit | Forbidden |
-| Admin categories | Forbidden |
-| Admin orders list | Forbidden |
-| Admin order details | Forbidden |
-| Admin content pages | Forbidden |
-| Admin reviews moderation | Forbidden |
+| Page | Intensity | Effect choice | Dependency |
+|---|---|---|---|
+| Home | Strong | Ambient gradient background; lazy-loaded ShinyText on the whole hero heading (no letter splitting) and one-time section reveals | CSS only; native `IntersectionObserver` |
+| Login | Strong | Static ambient gradient; one-time heading/content reveal. Keep form controls subtle-only | CSS only |
+| Register | Strong | Static ambient gradient; one-time heading/content reveal. Keep form controls subtle-only | CSS only |
+| Forgot/reset password | Strong | Static ambient gradient; one-time heading/content reveal. Keep form controls subtle-only | CSS only |
+| About | Strong | Section-heading and content reveal on scroll; whole text blocks | CSS + native `IntersectionObserver` |
+| 404 | Strong | Static ambient gradient; one-time message/action reveal | CSS only |
+| Product listing | Medium | Scroll reveal for page sections; card hover uses transform/opacity only, not per-card entrance animation | CSS + native `IntersectionObserver` |
+| Search results | Medium | Scroll reveal for page sections; result-card hover uses transform/opacity only, not per-card entrance animation | CSS + native `IntersectionObserver` |
+| Product details | Medium | Scroll reveal for gallery/details sections; restrained image hover transform | CSS + native `IntersectionObserver` |
+| Cart | Medium | One-time reveal for cart sections; restrained item/action hover transitions | CSS + native `IntersectionObserver` |
+| Order confirmation | Medium | One-time reveal for confirmation and status content | CSS only |
+| Account overview | Medium | Section reveal and one-time count-up for account summary numbers | CSS + small native React count-up; `IntersectionObserver` |
+| Profile | Medium page; subtle form | Section reveal; form controls use button/focus transitions only | CSS + native `IntersectionObserver` |
+| Addresses | Medium page; subtle forms | Section reveal; address forms use button/focus transitions only | CSS + native `IntersectionObserver` |
+| Orders list | Medium | Section reveal; restrained row/card hover using transform/opacity only | CSS + native `IntersectionObserver` |
+| Order details | Medium | One-time reveal for order sections and status timeline | CSS + native `IntersectionObserver` |
+| Content pages (policies, etc.) | Medium | Section-heading and content reveal on scroll | CSS + native `IntersectionObserver` |
+| Contact | Medium page; subtle form | Section reveal; contact form uses button/focus transitions only | CSS + native `IntersectionObserver` |
+| Access denied | Medium | One-time reveal for message and available action | CSS only |
+| Checkout | Subtle only | Button/focus transitions and non-blocking toast enter/exit; no background, text, or looping effects | CSS only |
+| All other forms | Subtle only | Button/focus transitions and non-blocking validation/toast feedback; no background, text, or looping effects | CSS only |
+| Admin dashboard | Subtle only | One-time count-up for dashboard numbers; subtle button/toast transitions | Native React count-up; CSS |
+| Admin products list | Subtle only | Button/focus transitions; no animated row/card entrance | CSS only |
+| Admin product create | Subtle only | Button/focus transitions and non-blocking validation feedback | CSS only |
+| Admin product edit | Subtle only | Button/focus transitions and non-blocking validation feedback | CSS only |
+| Admin categories | Subtle only | Button/focus transitions; no animated row entrance | CSS only |
+| Admin orders list | Subtle only | Button/focus transitions; no animated row entrance | CSS only |
+| Admin order details | Subtle only | Button/focus transitions; no animated timeline | CSS only |
+| Admin content pages | Subtle only | Button/focus transitions and non-blocking validation feedback | CSS only |
+| Admin reviews moderation | Subtle only | Button/focus transitions; no animated review entrance | CSS only |
 
 ## Open Questions
 - Exact route-parameter identifiers and how order confirmation references an order: TBD.

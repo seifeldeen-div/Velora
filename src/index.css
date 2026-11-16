@@ -1,12 +1,73 @@
 @import 'tailwindcss';
 @import './styles/theme.css';
+@import './styles/components.css';
+@import './styles/layout.css';
 
 html,
 body,
 #root {
+  min-width: 320px;
   min-height: 100%;
+}
+
+html {
+  background: var(--theme-page);
+  color: var(--theme-text);
+  font-family: var(--theme-font-english);
+  scroll-behavior: smooth;
+}
+
+html[lang='ar'] {
+  font-family: var(--theme-font-arabic);
 }
 
 body {
   margin: 0;
+  background:
+    radial-gradient(
+      ellipse at 50% -18rem,
+      color-mix(in srgb, var(--theme-accent) 27%, transparent),
+      transparent 48rem
+    ),
+    var(--theme-page);
+  color: var(--theme-text);
+  font-size: var(--theme-body-size);
+  line-height: var(--theme-body-line-height);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--theme-accent) 35%, transparent);
+  color: var(--theme-heading);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
