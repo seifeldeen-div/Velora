@@ -8,7 +8,7 @@ function LanguageToggle() {
     <button
       type="button"
       aria-label={t('language.toggle')}
-      className="border px-3 py-2"
+      className="ui-button ui-button--secondary ui-button--sm"
       onClick={() => void i18n.changeLanguage(nextLanguage)}
     >
       {t(`language.${nextLanguage === 'ar' ? 'arabic' : 'english'}`)}

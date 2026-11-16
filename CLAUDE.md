@@ -42,10 +42,13 @@
 - Visual direction: minimal modern with a luxury touch; design images are the source
   of truth for theme values. Keep one accent variable in one theme file; font details
   are TBD until images arrive. Dark mode is postponed.
-- React Bits: copy into `src/components/effects/` behind project wrappers; use only
-  in hero, section titles, and auth pages. Never use in checkout, forms, large product
-  lists, or admin. Respect reduced motion, lazy-load heavy effects, and test Arabic
-  text effects for connected letters. No three.js, gsap, or ogl without approval.
+- React Bits are used across pages at strong/medium/subtle intensity per
+  `docs/UX.md`; choose and log an effect per page there. Copy into
+  `src/components/effects/` behind swappable wrappers. Respect reduced motion,
+  lazy-load heavy effects without delaying LCP, keep product-list effects to CSS
+  transform/opacity, test text effects in Arabic/RTL, and never block user actions.
+  Checkout, forms, and admin are subtle-only (no backgrounds, text, or looping
+  effects). Ask before adding heavy dependencies such as three.js, gsap, or ogl.
 - Backend is authoritative for totals, prices, and business rules; never trust client-side calculations.
 - Never put secrets in frontend environment variables; `VITE_*` values are public.
 - Route guards are UX only; Laravel enforces authentication and permissions.

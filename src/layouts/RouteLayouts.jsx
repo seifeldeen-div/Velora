@@ -1,31 +1,32 @@
 import { Outlet } from 'react-router-dom'
-import LanguageToggle from '../components/LanguageToggle.jsx'
+import Footer from '../components/layout/Footer.jsx'
+import Header from '../components/layout/Header.jsx'
 
-function RouteLayout() {
+/** @param {{ variant?: 'public' | 'auth' | 'account' | 'admin' }} props */
+function RouteLayout({ variant = 'public' }) {
   return (
-    <>
-      <header className="flex justify-end p-4">
-        <LanguageToggle />
-      </header>
-      <main className="p-4">
+    <div className={`app-shell app-shell--${variant}`}>
+      <Header />
+      <main className={`site-main site-main--${variant}`} id="main-content">
         <Outlet />
       </main>
-    </>
+      <Footer />
+    </div>
   )
 }
 
 export function PublicLayout() {
-  return <RouteLayout />
+  return <RouteLayout variant="public" />
 }
 
 export function AuthLayout() {
-  return <RouteLayout />
+  return <RouteLayout variant="auth" />
 }
 
 export function AccountLayout() {
-  return <RouteLayout />
+  return <RouteLayout variant="account" />
 }
 
 export function AdminLayout() {
-  return <RouteLayout />
+  return <RouteLayout variant="admin" />
 }

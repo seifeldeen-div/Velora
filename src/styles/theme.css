@@ -1,10 +1,46 @@
 :root {
-  /* Replace TBD tokens from the design images before styling UI phases. */
-  --theme-accent: TBD;
-  --theme-font-arabic: TBD;
-  --theme-font-english: TBD;
-  --theme-radius-control: TBD;
-  --theme-radius-card: TBD;
-  --theme-shadow-card: TBD;
-  --theme-shadow-overlay: TBD;
+  color-scheme: dark;
+  --theme-page: #03010e;
+  --theme-surface: #0b0c17;
+  --theme-surface-raised: #0b0c17;
+  --theme-text: #dad4de;
+  --theme-heading: #ffffff;
+  --theme-muted: #817e84;
+  --theme-accent: #937aff;
+  --theme-danger: #ff5353;
+  --theme-border: #202128;
+  --theme-font-arabic: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  --theme-font-english: 'Inter', sans-serif;
+  --theme-body-size: 16px;
+  --theme-body-line-height: 26px;
+  --theme-heading-size: 31px;
+  --theme-heading-weight: 700;
+  --theme-heading-line-height: 1.25;
+  --theme-radius-control: 9999px;
+  --theme-radius-card: 36px;
+  --theme-radius-panel: 36px;
+  --theme-radius-field: 9999px;
+  --theme-radius-small: 4px;
+  --theme-shadow-card: none;
+  --theme-shadow-overlay:
+    0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  --theme-container: 1320px;
+  --theme-section-space: 51px;
+  --theme-section-panel-space: 51px;
+  --theme-footer-space: 51px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --theme-heading-size: 39px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --theme-radius-panel: 80px;
+    --theme-section-space: 64px;
+    --theme-section-panel-space: 152px;
+    --theme-footer-space: 76px;
+  }
 }
