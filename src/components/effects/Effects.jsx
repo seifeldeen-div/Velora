@@ -20,3 +20,5 @@ export function ScrollReveal({ children, className = '' }) {
     </Suspense>
   )
 }
+
+export { default as Reveal } from './Reveal.jsx'

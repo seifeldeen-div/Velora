@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Icon from '../Icon.jsx'
 import LanguageToggle from '../LanguageToggle.jsx'
+import { useAuth } from '../../features/auth/useAuth.js'
+import { useToast } from '../ui/ToastProvider.jsx'
 import MobileNavigation from './MobileNavigation.jsx'
 
 /** @param {{ forceMobile?: boolean, mainId?: string }} props */
 function Header({ forceMobile = false, mainId = 'main-content' }) {
   const { t } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
+  const showToast = useToast()
+  const { user, loading, logout } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const links = [
@@ -21,6 +26,18 @@ function Header({ forceMobile = false, mainId = 'main-content' }) {
     setMobileOpen(false)
     setUserMenuOpen(false)
   }, [location.pathname])
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      showToast({ message: t('auth.logout.success'), tone: 'success' })
+      navigate('/')
+    } catch (_error) {
+      showToast({ message: t('auth.errors.unknown'), tone: 'error' })
+    } finally {
+      setUserMenuOpen(false)
+    }
+  }
 
   return (
     <>
@@ -74,9 +91,29 @@ function Header({ forceMobile = false, mainId = 'main-content' }) {
                   id="user-menu-options"
                   aria-label={t('layout.userMenu')}
                 >
-                  <Link to="/account">{t('layout.account')}</Link>
-                  <Link to="/account/orders">{t('layout.orders')}</Link>
-                  <Link to="/login">{t('pages.login')}</Link>
+                  {loading ? (
+                    <p className="user-menu__status">{t('common.loading')}</p>
+                  ) : user ? (
+                    <>
+                      <Link to="/account">{t('auth.menu.account')}</Link>
+                      <Link to="/account/orders">{t('auth.menu.orders')}</Link>
+                      {user.role === 'admin' && (
+                        <Link to="/admin/dashboard">{t('auth.menu.admin')}</Link>
+                      )}
+                      <button
+                        type="button"
+                        className="user-menu__action"
+                        onClick={handleLogout}
+                      >
+                        {t('auth.actions.logout')}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/login">{t('auth.menu.login')}</Link>
+                      <Link to="/register">{t('auth.menu.register')}</Link>
+                    </>
+                  )}
                 </nav>
               )}
             </div>
